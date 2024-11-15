@@ -57,28 +57,29 @@ public class EmployeeService {
             if(updatedEmployee.getEmpName() != null)
                 existingEmployee.setEmpName(updatedEmployee.getEmpName());
 
-            if(updatedEmployee.getSalary() != null)
-                existingEmployee.setSalary(updatedEmployee.getSalary());
+//            if(updatedEmployee.getSalary() != null)
+//                existingEmployee.setSalary(updatedEmployee.getSalary());
 
             if(updatedEmployee.getAddress() != null){
-               Address existedAddress = existingEmployee.getAddress();
+               Address existingAddress = existingEmployee.getAddress();
                Address updatedAddress = updatedEmployee.getAddress();
 
-               if(updatedAddress.getCity() != null && !updatedAddress.getCity().equals(existedAddress.getCity())) {
-                   existedAddress.setCity(updatedAddress.getCity());
+               if(updatedAddress.getCity() != null && !updatedAddress.getCity().equals(existingAddress.getCity())) {
+                   existingAddress.setCity(updatedAddress.getCity());
                }
 
-                System.out.println(existedAddress.getId());
-                System.out.println(existedAddress.getCity());
-                System.out.println(updatedAddress.getCity());
             }
 
             repo.save(existingEmployee);
+            repo.flush();
+
             return "Employee details updated";
         }
 
             return "Employee not found";
 
     }
+
+
 
 }
