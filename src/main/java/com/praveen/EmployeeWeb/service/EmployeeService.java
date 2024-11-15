@@ -29,6 +29,10 @@ public class EmployeeService {
         return repo.findByEmpName(empName);
     }
 
+    public Employee getEmployeeById(int id) {
+        return repo.findById(id).orElse(null);
+    }
+
     public String deleteEmployeeById(int id) {
         Employee employee = repo.findById(id).orElse(null);
 
@@ -41,11 +45,12 @@ public class EmployeeService {
 
     }
 
-    public String updateEmployeeById(int id) {
+    public String updateEmployeeById(int id, Employee newEmployee) {
         Employee employee = repo.findById(id).orElse(null);
 
-        if(employee != null){
-            repo.save(employee);
+        if (employee != null) {
+            newEmployee.setId(employee.getId());
+            repo.save(newEmployee);
             return "Employee details updated";
         }
         else

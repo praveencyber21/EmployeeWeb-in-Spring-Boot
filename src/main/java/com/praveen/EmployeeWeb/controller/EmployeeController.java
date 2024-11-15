@@ -6,6 +6,7 @@ import com.praveen.EmployeeWeb.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,17 +42,28 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/employee/{empName}")
-    public ResponseEntity<ApiResponse<Object>> getEmployeeByName(@PathVariable String empName) {
+//    @GetMapping("/employee/{empName}")
+//    public ResponseEntity<ApiResponse<Object>> getEmployeeByName(@PathVariable String empName) {
+//
+//        Employee employee = service.getEmployeeByName(empName);
+//
+//        if (employee != null) {
+//            return ResponseEntity.ok(new ApiResponse<>(employee, 200, "Employee details fetched successfully", true));
+//        } else {
+//
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ApiResponse<>(new HashMap<String, Object>(), 200, "Employee not found", false));
+//        }
+//    }
 
-        Employee employee = service.getEmployeeByName(empName);
+    @GetMapping("/employee/{id}")
+    public ResponseEntity<ApiResponse<Object>> getEmployeeById(@PathVariable int id) {
+        Employee employee = service.getEmployeeById(id);
 
-        if (employee != null) {
-            return ResponseEntity.ok(new ApiResponse<>(employee, 200, "Employee details fetched successfully", true));
+        if(employee != null) {
+            return ResponseEntity.ok(new ApiResponse<>(employee, 200, "Employee details fetches successfully", true));
         } else {
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(new HashMap<String, Object>(), 200, "Employee not found", false));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(new HashMap<String, Object>(), 200, "Employee not found", false));
         }
     }
 
@@ -67,8 +79,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/employee/{id}")
-    public ResponseEntity<ApiResponse<Object>> updateEmployeeById(@PathVariable int id) {
-        String result = service.updateEmployeeById(id);
+    public ResponseEntity<ApiResponse<Object>> updateEmployeeById(@PathVariable int id, @RequestBody Employee employee) {
+        String result = service.updateEmployeeById(id, employee);
 
         if("Employee details updated".equals(result))
             return ResponseEntity.ok(new ApiResponse<>(new HashMap<String, Object>(), 0, "Employee details updated", true));
