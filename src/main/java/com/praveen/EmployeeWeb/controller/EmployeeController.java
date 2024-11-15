@@ -6,9 +6,7 @@ import com.praveen.EmployeeWeb.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,19 +26,17 @@ public class EmployeeController {
         return ResponseEntity.ok(new ApiResponse<>(service.getAllEmployee(), 0, "Details fetched successfully", true));
     }
 
-
     @PostMapping("/employee")
     public ResponseEntity<ApiResponse<Object>> addEmployee(@RequestBody Employee employee) {
         Employee savedEmployee = service.addEmployee(employee);
 
         if(savedEmployee != null)
-                return ResponseEntity.ok(new ApiResponse<>(new HashMap<String, Object>(), 0, "Employee added successfully", true));
+                return ResponseEntity.ok(new ApiResponse<>(employee, 0, "Employee added successfully", true));
         else
             return ResponseEntity.internalServerError()
                     .body(new ApiResponse<>(new HashMap<String, Object>(), 400, "Failed", false));
 
     }
-
 
 //    @GetMapping("/employee/{empName}")
 //    public ResponseEntity<ApiResponse<Object>> getEmployeeByName(@PathVariable String empName) {

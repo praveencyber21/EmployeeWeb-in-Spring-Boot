@@ -1,11 +1,13 @@
 package com.praveen.EmployeeWeb.service;
 
+import com.praveen.EmployeeWeb.model.Address;
 import com.praveen.EmployeeWeb.model.Employee;
 import com.praveen.EmployeeWeb.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -45,15 +47,36 @@ public class EmployeeService {
 
     }
 
-    public String updateEmployeeById(int id, Employee newEmployee) {
-        Employee employee = repo.findById(id).orElse(null);
+    public String updateEmployeeById(int id, Employee updatedEmployee) {
 
-        if (employee != null) {
-            newEmployee.setId(employee.getId());
-            repo.save(newEmployee);
+        Optional<Employee> employee = repo.findById(id);
+
+        if (employee.isPresent()) {
+            Employee existingEmployee = employee.get();
+
+            if(updatedEmployee.getEmpName() != null)
+                existingEmployee.setEmpName(updatedEmployee.getEmpName());
+
+            if(updatedEmployee.getSalary() != null)
+                existingEmployee.setSalary(updatedEmployee.getSalary());
+
+            if(updatedEmployee.getAddress() != null){
+               Address existedAddress = existingEmployee.getAddress();
+               Address updatedAddress = updatedEmployee.getAddress();
+
+               if(updatedAddress.getCity() != null && !updatedAddress.getCity().equals(existedAddress.getCity())) {
+                   existedAddress.setCity(updatedAddress.getCity());
+               }
+
+                System.out.println(existedAddress.getId());
+                System.out.println(existedAddress.getCity());
+                System.out.println(updatedAddress.getCity());
+            }
+
+            repo.save(existingEmployee);
             return "Employee details updated";
         }
-        else
+
             return "Employee not found";
 
     }
